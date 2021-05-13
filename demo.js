@@ -10,4 +10,10 @@ btn.stateChanged(function(event){
 });
 
 var txtbox = new MyToolkit.Textbox;
-txtbox.move(200, 200);
+txtbox.move(300, 120);
+txtbox.stateChanged(function(event){
+	console.log(event);
+});
+txtbox.ontype(function(event){
+	console.log(event);
+})

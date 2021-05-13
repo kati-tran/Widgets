@@ -5,6 +5,7 @@ import {SVG} from './svg.min.js';
 
 Main Color Hex: #2E80A1
 On Hover Hex: #76B3CB
+Action Hex: #677d8f
 
 Font-Family: Georgia
 
@@ -13,12 +14,17 @@ Font-Family: Georgia
 
 var MyToolkit = (function() {
     var box = SVG().addTo('body').size('100%','100%');
+    var nonComponent = box.rect('100%','100%').fill('white');
+
+    /** Creates a basic button **/
     var Button = function(){
         var draw = box;
-        var rect = draw.rect(125,50).fill('#2E80A1').rx(7);
+        
         var clickEvent = null;
         var stateEvent = null;
         var defaultState = "idle";
+
+        var rect = draw.rect(125,50).fill('#2E80A1').rx(7);
         var text = draw.text("").font({family: 'Georgia', weight: 'bold'}).fill("white").css({'pointer-events': 'none', 'user-select': 'none'});
 
         rect.mouseover(function(){
@@ -45,14 +51,6 @@ var MyToolkit = (function() {
             defaultState = "pressed";
             transition();
         })
-        rect.mousemove(function(event){
-        })
-
-        // rect.click(function(event){
-        //     this.fill({ color: 'pink'})
-        //     if(clickEvent != null)
-        //         clickEvent(event)
-        // })
 
         function transition()
         {
@@ -75,9 +73,6 @@ var MyToolkit = (function() {
             setText: function(input){
                 text.text(input);
             },
-            //onmouseover: function(eventHandler){
-            //    stateEvent = eventHandler
-            //},
             setId: function(id){
                 rect.attr("id", id);
             }
@@ -86,29 +81,69 @@ var MyToolkit = (function() {
 
     var Textbox = function(){
         var textbox = box;
-        var rect = textbox.rect(200,30).fill('white').stroke("black");
-        var text = textbox.text("");
-        //var caret = textbox.line(45, 2.5, 45, 25).stroke({width:1, color:"black"});
-        var caret = textbox.rect(2,20);
-        var runner = caret.animate().width(0);
-        runner.loop(1000,1,0);
 
+        var typeEvent = null;
+        var stateEvent = null;
+        var defaultState = "idle";
+
+        var rect = textbox.rect(200,30).fill('white').stroke("black").rx(7);
+        var text = textbox.text("").font({family: 'Georgia'});
+        var caret = textbox.rect(2,20).hide();
         var initialCaretPosition = 0;
 
-        SVG.on(window, "keyup", (event) =>{
-            text.text(text.text() + event.key);
-            caret.x(text.length()+initialCaretPosition);
+        rect.click(function(){
+            this.stroke("#2E80A1");
+            defaultState = "active";
+
+            caret.show();
+            var runner = caret.animate().width(0);
+            runner.loop(1000,1,0);
+
+            SVG.on(window, "keyup", (event) =>{
+                if(text.length() >= 190){
+                    SVG.off(window, "keyup");
+                }
+                else{
+                    text.text(text.text() + event.key);
+                    caret.x(text.length()+initialCaretPosition);
+                }
+                if(typeEvent != null)
+                    typeEvent(event)
+            })
+
+            transition();
         })
 
+        nonComponent.click(function(){
+            rect.stroke("black");
+            defaultState = "inactive";
+            caret.hide();
+            SVG.off(window, "keyup");
+            transition();
+        })
+
+        function transition()
+        {
+            if(stateEvent != null){
+                stateEvent(defaultState);
+            }
+        }
+        
         return {
             move: function(x,y){
                 rect.move(x,y);
-                text.move(x,y);
-                caret.move(x,y+4);
-                initialCaretPosition = x;
+                text.move(x+3,y);
+                caret.move(x+3,y+5);
+                initialCaretPosition = x+3;
             },
             src: function(){
                 return textbox;
+            },
+            stateChanged: function(eventHandler){
+                stateEvent = eventHandler
+            },
+            ontype: function(eventHandler){
+                typeEvent = eventHandler
             }
         }
 
