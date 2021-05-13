@@ -79,6 +79,75 @@ var MyToolkit = (function() {
         }
     }
 
+        /** Creates a basic checkbox **/
+        var Checkbox = function(){
+            var draw = box;
+            
+            var clickEvent = null;
+            var stateEvent = null;
+            var defaultState = "idle";
+            var isChecked = false;
+    
+            var checkbox = draw.rect(25,25).fill('white').stroke("black").rx(7);
+            var label = draw.text("").font({family: 'Georgia', weight: 'bold'}).fill("black");
+    
+            checkbox.mouseover(function(){
+                this.stroke({ color: '#2E80A1'})
+                label.fill("#2E80A1")
+                defaultState = "hover";
+                transition();
+            })
+            checkbox.mouseout(function(){
+                this.stroke({ color: 'black'})
+                label.fill("black")
+                defaultState = "idle";
+                transition();
+            })
+            checkbox.mousedown(function(event){
+                if(isChecked){
+                    this.fill({color:'white'})
+                    defaultState = "unchecked";
+                    isChecked = false;
+                }
+                else{
+                    this.fill({ color: '#677d8f'})
+                    defaultState = "checked";
+                    isChecked = true;
+                }
+                if(clickEvent != null)
+                    clickEvent(event)
+                transition();
+            })
+    
+            function transition()
+            {
+                if(stateEvent != null){
+                    stateEvent(defaultState);
+                }
+            }
+    
+            return {
+                move: function(x, y) {
+                    checkbox.move(x, y);
+                    label.move(x+30,y+4);
+                    checkbox.after(label);
+                },
+                onclick: function(eventHandler){
+                    clickEvent = eventHandler
+                },
+                stateChanged: function(eventHandler){
+                    stateEvent = eventHandler
+                },
+                setText: function(input){
+                    label.text(input);
+                },
+                setId: function(id){
+                    checkbox.attr("id", id);
+                }
+            }
+        }
+
+    /** Creates a basic textbox **/
     var Textbox = function(){
         var textbox = box;
 
@@ -144,12 +213,15 @@ var MyToolkit = (function() {
             },
             ontype: function(eventHandler){
                 typeEvent = eventHandler
+            },
+            setId: function(id){
+                rect.attr("id", id);
             }
         }
 
     }
 
-return {Button, Textbox}
+return {Button, Checkbox, Textbox}
 }());
 
 export{MyToolkit}
