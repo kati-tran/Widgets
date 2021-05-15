@@ -21,6 +21,21 @@ chk.onclick(function(event){
 	console.log(event);
 })
 
+// Implement a MyToolkit Checkbox
+let opt = [];
+opt.push(["RadioButton 1", false]);
+opt.push(["RadioButton 2", false]);
+opt.push(["RadioButton 3", true]);
+var rdbtn = new MyToolkit.RadioButton(opt);
+rdbtn.move(100,270);
+rdbtn.stateChanged(function(event){
+	console.log(event);
+});
+rdbtn.onclick(function(event){
+	console.log(event);
+	console.log(event.target.id);
+})
+
 // Implement a MyToolKit Textbox
 var txtbox = new MyToolkit.Textbox;
 txtbox.move(300, 120);
