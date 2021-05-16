@@ -5,6 +5,9 @@ var btn = new MyToolkit.Button;
 btn.setId("btnID");
 btn.setText("Button Text");
 btn.move(100,100);
+btn.onclick(function(event){
+	console.log(event);
+})
 btn.stateChanged(function(event){
 	console.log(event);
 });
@@ -21,7 +24,7 @@ chk.onclick(function(event){
 	console.log(event);
 })
 
-// Implement a MyToolkit Checkbox
+// Implement a MyToolkit RadioButton
 let opt = [];
 opt.push(["RadioButton 1", false]);
 opt.push(["RadioButton 2", false]);
@@ -45,3 +48,19 @@ txtbox.stateChanged(function(event){
 txtbox.ontype(function(event){
 	console.log(event);
 })
+
+// Implement a MyToolKit ScrollBar
+var scrollbar = new MyToolkit.ScrollBar;
+scrollbar.move(300,200);
+scrollbar.setHeight(200);
+scrollbar.stateChanged(function(event){
+	console.log(event)
+})
+scrollbar.moveChanged(function(event){
+	console.log(event);
+})
+
+var progressbar = new MyToolkit.ProgressBar;
+progressbar.move(350, 200);
+progressbar.setWidth(200);
+progressbar.setIncrement(50);

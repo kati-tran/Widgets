@@ -92,8 +92,8 @@ var MyToolkit = (function() {
         var label = draw.text("").font({family: 'Georgia', weight: 'bold'}).fill("black");
 
         checkbox.mouseover(function(){
-            this.stroke({ color: '#2E80A1'})
-            label.fill("#2E80A1")
+            this.stroke({ color: '#677d8f'})
+            label.fill("#677d8f")
             defaultState = "hover";
             transition();
         })
@@ -110,7 +110,7 @@ var MyToolkit = (function() {
                 isChecked = false;
             }
             else{
-                this.fill({ color: '#677d8f'})
+                this.fill({ color: '#2E80A1'})
                 defaultState = "checked";
                 isChecked = true;
             }
@@ -170,7 +170,6 @@ var MyToolkit = (function() {
             label.move(label.x() + 30, label.y() + (35 * index))
 
             radiobuttons.push(radio);
-            console.log(radiobuttons);
 
             parent.add(radio);
             parent.add(label);
@@ -178,11 +177,11 @@ var MyToolkit = (function() {
 
         parent.each(function(i, children) {
             if(children[i].attr('isChecked') == "true"){
-                children[i].fill({ color: '#677d8f'})
+                children[i].fill({ color: '#2E80A1'})
             }
             children[i].mouseover(function(){
                 //console.log(radio.attr("isChecked"));
-                this.stroke({ color: '#2E80A1'})
+                this.stroke({ color: '#677d8f'})
                 defaultState = "hover";
                 transition();
             })
@@ -196,7 +195,7 @@ var MyToolkit = (function() {
                     radiobuttons[radios].fill({color:"white"}).attr("isChecked",false);
                 }
                 
-                this.fill({ color: '#677d8f'})
+                this.fill({ color: '#2E80A1'})
                 defaultState = "checked";
                 children[i].attr("isChecked", true);
                 if(clickEvent != null)
@@ -235,6 +234,7 @@ var MyToolkit = (function() {
         var typeEvent = null;
         var stateEvent = null;
         var defaultState = "idle";
+        var textboxActive = false;
 
         var rect = textbox.rect(200,30).fill('white').stroke("black").rx(7);
         var text = textbox.text("").font({family: 'Georgia'});
@@ -244,6 +244,7 @@ var MyToolkit = (function() {
         rect.click(function(){
             this.stroke("#2E80A1");
             defaultState = "active";
+            textboxActive = true;
 
             caret.show();
             var runner = caret.animate().width(0);
@@ -254,8 +255,16 @@ var MyToolkit = (function() {
                     SVG.off(window, "keyup");
                 }
                 else{
-                    text.text(text.text() + event.key);
-                    caret.x(text.length()+initialCaretPosition);
+                    if(event.key == "Backspace"){
+                        text.text(text.text().slice(0, -1));
+                        caret.x(text.length()+initialCaretPosition);
+                    }
+                    else if(event.key == "Shift"){
+                    }
+                    else{
+                        text.text(text.text() + event.key);
+                        caret.x(text.length()+initialCaretPosition);
+                    }
                 }
                 if(typeEvent != null)
                     typeEvent(event)
@@ -265,11 +274,13 @@ var MyToolkit = (function() {
         })
 
         nonComponent.click(function(){
-            rect.stroke("black");
-            defaultState = "inactive";
-            caret.hide();
-            SVG.off(window, "keyup");
-            transition();
+            if(textboxActive){
+                rect.stroke("black");
+                defaultState = "inactive";
+                caret.hide();
+                SVG.off(window, "keyup");
+                transition();
+            }
         })
 
         function transition()
@@ -302,7 +313,179 @@ var MyToolkit = (function() {
 
     }
 
-return {Button, Checkbox, RadioButton, Textbox}
+    /** Creates a basic scrollbar **/
+    var ScrollBar = function(){
+        var scrollbar = box;
+
+        var moveEvent = null;
+        var movingState = "not moving";
+        var stateEvent = null;
+        var defaultState = "idle";
+
+        var height = 200;
+
+        var scrollerY = 0;
+        var scrollerActive = false;
+
+        var rect = scrollbar.rect(30,200).fill('white').stroke("black").rx(7);
+        var scroller = scrollbar.rect(28,30).fill('#2E80A1').rx(7);
+
+        scroller.mousedown(function(){
+            scroller.fill('#677d8f');
+            scrollerActive = true;
+            defaultState = "active";
+            transition();
+        })
+
+        rect.mousemove(function(event){
+            if(scrollerActive)
+            {
+                if(scroller.y() < scrollerY){
+                    movingState = "moving up";
+                    moveTransition();
+                }
+                else if(scroller.y() > scrollerY){
+                    movingState = "moving down";
+                    moveTransition();
+                }
+                if(event.clientY <= ((height+170))){
+                    scroller.move(scroller.x(), event.clientY);
+                } 
+                defaultState = "moving";
+                transition();                   
+            } 
+        })
+
+        /** For when user stops holding down the scroller **/
+        rect.mouseup(function(){
+            if(scrollerActive){
+                scroller.fill('#2E80A1');
+                scrollerActive = false;
+                defaultState = "idle";
+                transition();        
+            }
+            scrollerY = scroller.y();
+        })
+        scroller.mouseup(function(){
+            if(scrollerActive){
+                scroller.fill('#2E80A1');
+                scrollerActive = false;
+                defaultState = "idle";
+                transition();        
+            }
+            scrollerY = scroller.y();
+        })
+        nonComponent.mouseup(function(){
+            if(scrollerActive){
+                scroller.fill('#2E80A1');
+                scrollerActive = false;
+                defaultState = "idle";
+                transition();        
+            }
+            scrollerY = scroller.y();
+        })
+
+        scroller.mouseover(function(){
+            if(!scrollerActive){
+                this.fill({ color: '#76B3CB'})
+                defaultState = "hover";
+                transition();
+            }
+        })
+        scroller.mouseout(function(){
+            if(!scrollerActive)
+            {
+                this.fill('#2E80A1');
+                defaultState = "idle"
+            }
+        })
+
+        function transition()
+        {
+            if(stateEvent != null){
+                stateEvent(defaultState);
+            }
+        }
+
+        function moveTransition()
+        {
+            if(moveEvent != null){
+                moveEvent(movingState);
+            }
+        }
+        
+        return {
+            move: function(x,y){
+                rect.move(x,y);
+                scroller.move(x+1,y+1);
+                scrollerY = scroller.y();
+            },
+            src: function(){
+                return scrollbar;
+            },
+            stateChanged: function(eventHandler){
+                stateEvent = eventHandler
+            },
+            moveChanged: function(eventHandler){
+                moveEvent = eventHandler
+            },
+            setHeight: function(hei){
+                rect.size(30, hei);
+                height = hei;
+            },
+            setId: function(id){
+                rect.attr("id", id);
+            }
+        }
+    }
+
+    /** Creates a basic progressbar **/
+    var ProgressBar = function(){
+        var progressbar = box;
+
+        var incrementEvent = null;
+        var stateEvent = null;
+        var defaultState = "idle";
+
+        var width = 200;
+        var increment = 10;
+
+        var progress = progressbar.rect(increment, 30).fill('#2E80A1').rx(7)
+        var rect = progressbar.rect(200,30).fill('none').stroke("black").rx(7);
+
+        function transition()
+        {
+            if(stateEvent != null){
+                stateEvent(defaultState);
+            }
+        }
+        
+        return {
+            move: function(x,y){
+                rect.move(x,y);
+                progress.move(x, y)
+            },
+            src: function(){
+                return textbox;
+            },
+            stateChanged: function(eventHandler){
+                stateEvent = eventHandler
+            },
+            setId: function(id){
+                rect.attr("id", id);
+            },
+            setWidth: function(wid){
+                rect.size(wid, 30);
+            },
+            setIncrement: function(inc){
+                increment = inc;
+                progress.size((inc/100)*width, 30);
+            }
+        }
+
+    }
+
+return {Button, Checkbox, RadioButton, Textbox, ScrollBar, ProgressBar}
 }());
 
 export{MyToolkit}
