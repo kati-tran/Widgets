@@ -1,6 +1,7 @@
 // File name: mytoolkit.js
 
 import {SVG} from './svg.min.js';
+
 /* Theme Notes
 
 Main Color Hex: #2E80A1
@@ -11,12 +12,14 @@ Font-Family: Georgia
 
 */
 
-
 var MyToolkit = (function() {
     var box = SVG().addTo('body').size('100%','100%');
     var nonComponent = box.rect('100%','100%').fill('white');
 
-    /** Creates a basic button **/
+    /**
+     * Creates a basic button
+     * @returns Button
+     */
     var Button = function(){
         var draw = box;
         
@@ -52,6 +55,9 @@ var MyToolkit = (function() {
             transition();
         })
 
+        /**
+         * Transitions the event handler that notifies consuming code when the widget state has changed
+         */
         function transition()
         {
             if(stateEvent != null){
@@ -79,7 +85,10 @@ var MyToolkit = (function() {
         }
     }
 
-    /** Creates a basic checkbox **/
+    /**
+     * Creates a basic checkbox
+     * @returns Checkbox
+     */
     var Checkbox = function(){
         var draw = box;
         
@@ -119,6 +128,9 @@ var MyToolkit = (function() {
             transition();
         })
 
+        /**
+         * Transitions the event handler that notifies consuming code when the widget state has changed
+         */
         function transition()
         {
             if(stateEvent != null){
@@ -147,14 +159,17 @@ var MyToolkit = (function() {
         }
     }
 
-    /** Creates a basic radio button set **/
+    /**
+     * Creates a basic radiobutton set
+     * @param {Array} items 
+     * @returns Radiobutton
+     */
     var RadioButton = function(items){
         var draw = box;
 
         var clickEvent = null;
         var stateEvent = null;
 
-        //var parent = draw.rect(100,100).fill('white');
         var parent = draw.group();
         var radiobuttons = [];
 
@@ -204,18 +219,19 @@ var MyToolkit = (function() {
             })
           })
 
-          function transition()
-          {
-              if(stateEvent != null){
-                  stateEvent(defaultState);
-              }
-          }
+        /**
+         * Transitions the event handler that notifies consuming code when the widget state has changed
+         */
+        function transition()
+        {
+            if(stateEvent != null){
+                stateEvent(defaultState);
+            }
+        }
 
         return {
             move: function(x, y) {
                 parent.move(x, y);
-                //label.move(x+30,y+4);
-                //radio.after(label);
             },
             onclick: function(eventHandler){
                 clickEvent = eventHandler
@@ -227,7 +243,10 @@ var MyToolkit = (function() {
 
     }
 
-    /** Creates a basic textbox **/
+    /**
+     * Creates a basic textbox
+     * @returns Textbox
+     */
     var Textbox = function(){
         var textbox = box;
 
@@ -283,6 +302,9 @@ var MyToolkit = (function() {
             }
         })
 
+        /**
+         * Transitions the event handler that notifies consuming code when the widget state has changed
+         */
         function transition()
         {
             if(stateEvent != null){
@@ -313,7 +335,10 @@ var MyToolkit = (function() {
 
     }
 
-    /** Creates a basic scrollbar **/
+    /**
+     * Creates a basic scrollbar
+     * @returns ScrollBar
+     */
     var ScrollBar = function(){
         var scrollbar = box;
 
@@ -356,7 +381,6 @@ var MyToolkit = (function() {
             } 
         })
 
-        /** For when user stops holding down the scroller **/
         rect.mouseup(function(){
             if(scrollerActive){
                 scroller.fill('#2E80A1');
@@ -400,6 +424,9 @@ var MyToolkit = (function() {
             }
         })
 
+        /**
+         * Transitions the event handler that notifies consuming code when the widget state has changed
+         */
         function transition()
         {
             if(stateEvent != null){
@@ -407,6 +434,9 @@ var MyToolkit = (function() {
             }
         }
 
+        /**
+         * Transitions the event handler event handler that notifies consuming code when the scroll thumb has moved and in which direction
+         */
         function moveTransition()
         {
             if(moveEvent != null){
@@ -439,7 +469,10 @@ var MyToolkit = (function() {
         }
     }
 
-    /** Creates a basic progressbar **/
+    /**
+     * Creates a basic progress bar
+     * @returns ProgressBar
+     */
     var ProgressBar = function(){
         var progressbar = box;
 
@@ -465,6 +498,9 @@ var MyToolkit = (function() {
             transition();
         })
 
+        /**
+         * Transitions the event handler that notifies consuming code when the widget state has changed
+         */
         function transition()
         {
             if(stateEvent != null){
@@ -472,6 +508,9 @@ var MyToolkit = (function() {
             }
         }
 
+        /**
+         * Transitions the event handler that notifies consuming code when the progress bar has incremented
+         */
         function incrementTransition(){
             if(incrementEvent != null){
                 incrementEvent((progress.width()/width)*100);
@@ -511,7 +550,10 @@ var MyToolkit = (function() {
 
     }
 
-    /** Creates a basic toggle button **/
+    /**
+     * Creates a basic toggle button
+     * @returns ToggleButton
+     */
     var ToggleButton = function(){
         var draw = box;
         
@@ -557,6 +599,9 @@ var MyToolkit = (function() {
             transition();
         })
 
+        /**
+         * Transitions the event handler that notifies consuming code when the widget state has changed
+         */
         function transition()
         {
             if(stateEvent != null){
@@ -568,7 +613,6 @@ var MyToolkit = (function() {
             move: function(x, y) {
                 rect.move(x, y);
                 inner.move(x+1,y+1);
-                //text.move(x+13, y+15);
             },
             onclick: function(eventHandler){
                 clickEvent = eventHandler

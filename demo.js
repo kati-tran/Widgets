@@ -60,6 +60,7 @@ scrollbar.moveChanged(function(event){
 	console.log(event);
 })
 
+// Implement a MyToolKit ProgressBar
 var progressbar = new MyToolkit.ProgressBar;
 progressbar.move(350, 200);
 progressbar.setWidth(300);
@@ -72,13 +73,13 @@ progressbar.stateChanged(function(event){
 	console.log(event);
 })
 
+// Implement a MyToolKist ToggleButton
 var toggle = new MyToolkit.ToggleButton;
 toggle.setId("toggleID");
 toggle.move(350,250);
 toggle.onclick(function(event){
 	console.log(event);
 })
-/*
 toggle.stateChanged(function(event){
 	console.log(event);
-});*/
+});
