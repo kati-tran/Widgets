@@ -453,10 +453,28 @@ var MyToolkit = (function() {
         var progress = progressbar.rect(increment, 30).fill('#2E80A1').rx(7)
         var rect = progressbar.rect(200,30).fill('none').stroke("black").rx(7);
 
+        progress.mouseover(function(){
+            progress.fill('#76B3CB');
+            incrementTransition();
+            defaultState = "hover";
+            transition();
+        })
+        progress.mouseout(function(){
+            progress.fill('#2E80A1');
+            defaultState = "idle";
+            transition();
+        })
+
         function transition()
         {
             if(stateEvent != null){
                 stateEvent(defaultState);
+            }
+        }
+
+        function incrementTransition(){
+            if(incrementEvent != null){
+                incrementEvent((progress.width()/width)*100);
             }
         }
         
@@ -476,16 +494,95 @@ var MyToolkit = (function() {
             },
             setWidth: function(wid){
                 rect.size(wid, 30);
+                width = wid;
             },
             setIncrement: function(inc){
                 increment = inc;
                 progress.size((inc/100)*width, 30);
+            },
+            moveBar: function(inc){
+                var runner = progress.animate(2000).size((inc/100)*width, 30);
+                runner.loop(1000,0,500);
+            },
+            getIncrement: function(eventHandler){
+                incrementEvent = eventHandler;
             }
         }
 
     }
 
-return {Button, Checkbox, RadioButton, Textbox, ScrollBar, ProgressBar}
+    /** Creates a basic toggle button **/
+    var ToggleButton = function(){
+        var draw = box;
+        
+        var clickEvent = null;
+        var stateEvent = null;
+        var defaultState = "idle";
+
+        var toggled = false;
+
+        var rect = draw.rect(50,25).fill('lightgray').stroke('black').rx(7);
+        var inner = draw.circle(23).fill('white').css({'pointer-events': 'none', 'user-select': 'none'});
+
+        rect.click(function(event){
+            if(!toggled)
+            {
+                rect.fill({ color: '#2E80A1'})
+                if(defaultState == "toggled"){
+                    if(clickEvent != null)
+                        clickEvent(event)
+                }
+                inner.animate(200).move(rect.x()+25, rect.y()+1);
+                toggled = true;
+            }
+            else{
+                rect.fill('lightgray');
+                if(defaultState == "untoggled"){
+                    if(clickEvent != null)
+                        clickEvent(event)
+                }
+                inner.animate(200).move(rect.x()+1, rect.y()+1);
+                toggled = false;
+            }
+        })
+
+        rect.mousedown(function(){
+            if(!toggled)
+            {
+                defaultState = "toggled";  
+            }
+            else{
+                defaultState = "untoggled";
+            }
+            transition();
+        })
+
+        function transition()
+        {
+            if(stateEvent != null){
+                stateEvent(defaultState);
+            }
+        }
+
+        return {
+            move: function(x, y) {
+                rect.move(x, y);
+                inner.move(x+1,y+1);
+                //text.move(x+13, y+15);
+            },
+            onclick: function(eventHandler){
+                clickEvent = eventHandler
+            },
+            stateChanged: function(eventHandler){
+                stateEvent = eventHandler
+            },
+            setId: function(id){
+                rect.attr("id", id);
+            }
+        }
+    }
+
+return {Button, Checkbox, RadioButton, Textbox, ScrollBar, ProgressBar, ToggleButton}
 }());
 
 export{MyToolkit}

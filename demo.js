@@ -62,5 +62,23 @@ scrollbar.moveChanged(function(event){
 
 var progressbar = new MyToolkit.ProgressBar;
 progressbar.move(350, 200);
-progressbar.setWidth(200);
-progressbar.setIncrement(50);
+progressbar.setWidth(300);
+progressbar.setIncrement(0);
+progressbar.moveBar(100);
+progressbar.getIncrement(function(event){
+	console.log(event);
+});
+progressbar.stateChanged(function(event){
+	console.log(event);
+})
+
+var toggle = new MyToolkit.ToggleButton;
+toggle.setId("toggleID");
+toggle.move(350,250);
+toggle.onclick(function(event){
+	console.log(event);
+})
+/*
+toggle.stateChanged(function(event){
+	console.log(event);
+});*/
