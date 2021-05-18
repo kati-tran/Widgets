@@ -66,19 +66,40 @@ var MyToolkit = (function() {
         }
 
         return {
+            /**
+             * Set the position of the widget
+             * @param {int} x 
+             * @param {int} y 
+             */
             move: function(x, y) {
                 rect.move(x, y);
                 text.move(x+13, y+15);
             },
+            /**
+             * Expose the onclick event handler that notifies consuming code when the button is clicked
+             * @param {EventHandler} eventHandler 
+             */
             onclick: function(eventHandler){
                 clickEvent = eventHandler
             },
+            /**
+             * Expose the event handler that notifies consuming code when the widget state has changed
+             * @param {EventHandler} eventHandler 
+             */
             stateChanged: function(eventHandler){
                 stateEvent = eventHandler
             },
+            /**
+             * Set the text of the button
+             * @param {string} input 
+             */
             setText: function(input){
                 text.text(input);
             },
+            /**
+             * Set the unique ID of the button
+             * @param {string} id 
+             */
             setId: function(id){
                 rect.attr("id", id);
             }
@@ -139,20 +160,41 @@ var MyToolkit = (function() {
         }
 
         return {
+            /**
+             * Set the position of the widget
+             * @param {int} x 
+             * @param {int} y 
+             */
             move: function(x, y) {
                 checkbox.move(x, y);
                 label.move(x+30,y+4);
                 checkbox.after(label);
             },
+             /**
+             * Expose the onclick event handler that notifies consuming code when the checkbox is clicked
+             * @param {EventHandler} eventHandler 
+             */
             onclick: function(eventHandler){
                 clickEvent = eventHandler
             },
+            /**
+             * Expose the event handler that notifies consuming code when the widget state has changed
+             * @param {EventHandler} eventHandler 
+             */
             stateChanged: function(eventHandler){
                 stateEvent = eventHandler
             },
+            /**
+             * Set the text of the checkbox
+             * @param {string} input 
+             */
             setText: function(input){
                 label.text(input);
             },
+            /**
+             * Set the unique ID of the checkbox
+             * @param {string} id 
+             */
             setId: function(id){
                 checkbox.attr("id", id);
             }
@@ -195,7 +237,6 @@ var MyToolkit = (function() {
                 children[i].fill({ color: '#2E80A1'})
             }
             children[i].mouseover(function(){
-                //console.log(radio.attr("isChecked"));
                 this.stroke({ color: '#677d8f'})
                 defaultState = "hover";
                 transition();
@@ -230,12 +271,25 @@ var MyToolkit = (function() {
         }
 
         return {
+            /**
+             * Set the position of the widget
+             * @param {int} x 
+             * @param {int} y 
+             */
             move: function(x, y) {
                 parent.move(x, y);
             },
+            /**
+             * Expose handler that notifies consuming code when the checked state has changed and which n has been checked
+             * @param {EventHandler} eventHandler 
+             */
             onclick: function(eventHandler){
                 clickEvent = eventHandler
             },
+            /**
+             * Expose the event handler that notifies consuming code when the widget state has changed
+             * @param {EventHandler} eventHandler 
+             */
             stateChanged: function(eventHandler){
                 stateEvent = eventHandler
             },
@@ -313,21 +367,35 @@ var MyToolkit = (function() {
         }
         
         return {
+            /**
+             * Set the position of the widget
+             * @param {int} x 
+             * @param {int} y 
+             */
             move: function(x,y){
                 rect.move(x,y);
                 text.move(x+3,y);
                 caret.move(x+3,y+5);
                 initialCaretPosition = x+3;
             },
-            src: function(){
-                return textbox;
-            },
+            /**
+             * Expose the event handler that notifies consuming code when the widget state has changed
+             * @param {EventHandler} eventHandler 
+             */
             stateChanged: function(eventHandler){
                 stateEvent = eventHandler
             },
+            /**
+             * Expose the event handler that notifies consuming code when the text has changed
+             * @param {EventHandler} eventHandler 
+             */
             ontype: function(eventHandler){
                 typeEvent = eventHandler
             },
+            /**
+             * Set the unique ID of the textbox
+             * @param {string} id 
+             */
             setId: function(id){
                 rect.attr("id", id);
             }
@@ -445,24 +513,42 @@ var MyToolkit = (function() {
         }
         
         return {
+            /**
+             * Set the position of the widget
+             * @param {int} x 
+             * @param {int} y 
+             */
             move: function(x,y){
                 rect.move(x,y);
                 scroller.move(x+1,y+1);
                 scrollerY = scroller.y();
             },
-            src: function(){
-                return scrollbar;
-            },
+            /**
+             * Expose the event handler that notifies consuming code when the widget state has changed
+             * @param {EventHandler} eventHandler 
+             */
             stateChanged: function(eventHandler){
                 stateEvent = eventHandler
             },
+            /**
+             * Expose the event handler that notifies consuming code when the scroll thumb has moved and in which direction
+             * @param {EventHandler} eventHandler 
+             */
             moveChanged: function(eventHandler){
                 moveEvent = eventHandler
             },
+            /**
+             * Set the height of the scroll bar.
+             * @param {int} hei 
+             */
             setHeight: function(hei){
                 rect.size(30, hei);
                 height = hei;
             },
+            /**
+             * Set the unique ID of the scrollbar
+             * @param {string} id 
+             */
             setId: function(id){
                 rect.attr("id", id);
             }
@@ -518,31 +604,57 @@ var MyToolkit = (function() {
         }
         
         return {
+            /**
+             * Set the position of the widget
+             * @param {int} x 
+             * @param {int} y 
+             */
             move: function(x,y){
                 rect.move(x,y);
                 progress.move(x, y)
             },
-            src: function(){
-                return textbox;
-            },
+            /**
+             * Expose the event handler that notifies consuming code when the widget state has changed
+             * @param {EventHandler} eventHandler 
+             */
             stateChanged: function(eventHandler){
                 stateEvent = eventHandler
             },
+            /**
+             * Set the unique ID of the progress bar
+             * @param {string} id 
+             */
             setId: function(id){
                 rect.attr("id", id);
             },
+            /**
+             * Set the width of the progress bar.
+             * @param {int} wid 
+             */
             setWidth: function(wid){
                 rect.size(wid, 30);
                 width = wid;
             },
+            /**
+             * Set the initial increment of the progress bar
+             * @param {int} inc 
+             */
             setIncrement: function(inc){
                 increment = inc;
                 progress.size((inc/100)*width, 30);
             },
+            /**
+             * Set the moving increment of the progress bar
+             * @param {int} inc 
+             */
             moveBar: function(inc){
                 var runner = progress.animate(2000).size((inc/100)*width, 30);
                 runner.loop(1000,0,500);
             },
+            /**
+             * Expose the event handler that notifies consuming code when the progress bar has incremented
+             * @param {EventHandler} eventHandler 
+             */
             getIncrement: function(eventHandler){
                 incrementEvent = eventHandler;
             }
@@ -610,16 +722,33 @@ var MyToolkit = (function() {
         }
 
         return {
-            move: function(x, y) {
+            /**
+             * Set the position of the widget
+             * @param {int} x 
+             * @param {int} y 
+             */
+             move: function(x, y) {
                 rect.move(x, y);
-                inner.move(x+1,y+1);
+                text.move(x+1, y+1);
             },
+            /**
+             * Expose the onclick event handler that notifies consuming code when the button is clicked
+             * @param {EventHandler} eventHandler 
+             */
             onclick: function(eventHandler){
                 clickEvent = eventHandler
             },
+            /**
+             * Expose the event handler that notifies consuming code when the widget state has changed
+             * @param {EventHandler} eventHandler 
+             */
             stateChanged: function(eventHandler){
                 stateEvent = eventHandler
             },
+            /**
+             * Set the unique id of the toggle button
+             * @param {string} id 
+             */
             setId: function(id){
                 rect.attr("id", id);
             }
