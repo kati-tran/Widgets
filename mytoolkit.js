@@ -671,7 +671,7 @@ var MyToolkit = (function() {
         
         var clickEvent = null;
         var stateEvent = null;
-        var defaultState = "idle";
+        var defaultState = "untoggled";
 
         var toggled = false;
 
