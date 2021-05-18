@@ -306,7 +306,7 @@ var MyToolkit = (function() {
 
         var typeEvent = null;
         var stateEvent = null;
-        var defaultState = "idle";
+        var defaultState = "inactive";
         var textboxActive = false;
 
         var rect = textbox.rect(200,30).fill('white').stroke("black").rx(7);
